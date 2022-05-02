@@ -38,13 +38,13 @@ function Disciplines() {
       }
     }
   }
-  let filtered: any[] = [];
+  let filterDiscipline: any[] = [];
 
   if (searchBar) {
-    terms.forEach((t) => {
-      const filter = t.disciplines.filter((el) => el.name === searchBar);
+    terms.forEach((term) => {
+      const filter = term.disciplines.filter((el) => el.name === searchBar);
 
-      if (filter.length !== 0) filtered.push(filter[0]);
+      if (filter.length !== 0) filterDiscipline.push(filter[0]);
     });
   }
 
@@ -116,7 +116,7 @@ function Disciplines() {
         ) : (
           <DisciplinesAccordions
             categories={categories}
-            disciplines={filtered}
+            disciplines={filterDiscipline}
           />
         )}
       </Box>

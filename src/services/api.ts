@@ -59,6 +59,7 @@ export interface Test {
   name: string;
   pdfUrl: string;
   category: Category;
+  views: number;
 }
 
 export type TestByDiscipline = Term & {
@@ -92,12 +93,25 @@ async function getCategories(token: string) {
   return baseAPI.get<{ categories: Category[] }>("/categories", config);
 }
 
+async function getTeachers(token: string) {
+  const config = getConfig(token);
+  return baseAPI.get("/teachers", config);
+}
+
+async function addView(id: number, token: string) {
+  const config = getConfig(token);
+  return baseAPI.patch(`/tests/${id}`, null, config);
+}
+
+
 const api = {
   signUp,
   signIn,
   getTestsByDiscipline,
   getTestsByTeacher,
   getCategories,
+  getTeachers,
+  addView
 };
 
 export default api;
