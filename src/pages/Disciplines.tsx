@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Autocomplete,
   Box,
   Button,
   Divider,
@@ -10,7 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import api, {
@@ -24,8 +25,28 @@ import api, {
 function Disciplines() {
   const navigate = useNavigate();
   const { token } = useAuth();
+  const disciplinesName: string[] = [];
   const [terms, setTerms] = useState<TestByDiscipline[]>([]);
+  const termsList = terms?.map((term) => term.disciplines);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [searchBar, setSearchBar] = useState("");
+
+  if (termsList) {
+    for (let terms of termsList) {
+      for (let discip of terms) {
+        disciplinesName.push(discip.name);
+      }
+    }
+  }
+  let filtered: any[] = [];
+
+  if (searchBar) {
+    terms.forEach((t) => {
+      const filter = t.disciplines.filter((el) => el.name === searchBar);
+
+      if (filter.length !== 0) filtered.push(filter[0]);
+    });
+  }
 
   useEffect(() => {
     async function loadPage() {
@@ -33,6 +54,7 @@ function Disciplines() {
 
       const { data: testsData } = await api.getTestsByDiscipline(token);
       setTerms(testsData.tests);
+
       const { data: categoriesData } = await api.getCategories(token);
       setCategories(categoriesData.categories);
     }
@@ -41,9 +63,19 @@ function Disciplines() {
 
   return (
     <>
-      <TextField
+      <Autocomplete
+        disablePortal
+        id="combo-box-demo"
+        options={disciplinesName}
         sx={{ marginX: "auto", marginBottom: "25px", width: "450px" }}
-        label="Pesquise por disciplina"
+        onInputChange={(e, value) => setSearchBar(value)}
+        renderInput={(params: any) => (
+          <TextField
+            {...params}
+            sx={{ marginX: "auto", marginBottom: "25px", width: "450px" }}
+            label="Pesquise por disciplina"
+          />
+        )}
       />
       <Divider sx={{ marginBottom: "35px" }} />
       <Box
@@ -72,11 +104,21 @@ function Disciplines() {
           >
             Pessoa Instrutora
           </Button>
-          <Button variant="outlined" onClick={() => navigate("/app/adicionar")}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/app/adicionar-prova")}
+          >
             Adicionar
           </Button>
         </Box>
-        <TermsAccordions categories={categories} terms={terms} />
+        {!searchBar ? (
+          <TermsAccordions categories={categories} terms={terms} />
+        ) : (
+          <DisciplinesAccordions
+            categories={categories}
+            disciplines={filtered}
+          />
+        )}
       </Box>
     </>
   );
