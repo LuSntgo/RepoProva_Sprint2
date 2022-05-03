@@ -22,7 +22,7 @@ import api, {
   TestByDiscipline,
 } from "../services/api";
 
-function Disciplines() {
+export default function Disciplines() {
   const navigate = useNavigate();
   const { token } = useAuth();
   const disciplinesName: string[] = [];
@@ -271,5 +271,3 @@ function Tests({
     </>
   );
 }
-
-export default Disciplines;

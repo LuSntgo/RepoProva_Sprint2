@@ -50,7 +50,10 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.182",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
     "cypress": "^9.6.0",
+    "eslint": "^8.14.0",
     "eslint-plugin-cypress": "^2.12.1"
   }
 }

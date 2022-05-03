@@ -88,6 +88,16 @@ async function getTestsByTeacher(token: string) {
   );
 }
 
+async function getTeachersByDiscipline(discipline: string, token: string) {
+  const config = getConfig(token);
+  return baseAPI.get(`/teachers/${discipline}`, config);
+}
+
+async function getDisciplines(token: string) {
+  const config = getConfig(token);
+  return baseAPI.get(`/disciplines`, config);
+}
+
 async function getCategories(token: string) {
   const config = getConfig(token);
   return baseAPI.get<{ categories: Category[] }>("/categories", config);
@@ -103,6 +113,10 @@ async function addView(id: number, token: string) {
   return baseAPI.patch(`/tests/${id}`, null, config);
 }
 
+async function addTest(body: any, token: string) {
+  const config = getConfig(token);
+  return baseAPI.post("/tests", body, config);
+}
 
 const api = {
   signUp,
@@ -111,7 +125,10 @@ const api = {
   getTestsByTeacher,
   getCategories,
   getTeachers,
-  addView
+  addView,
+  getDisciplines,
+  addTest,
+  getTeachersByDiscipline
 };
 
 export default api;
